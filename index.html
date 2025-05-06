@@ -111,13 +111,9 @@
       { name: "You got", image: "toy6.png" },
     ];
 
-    const secretToy = { name: "What the hellie you got the secret!", image: "secret.png" };
-    let openedToys = [];
-    let maxOpens = 7;
+    const secretToy = { name: "What the hellie u got the secret!", image: "secret.png" };
 
     function openBox() {
-      if (openedToys.length >= maxOpens) return;
-
       document.getElementById('main').innerHTML = `
         <img id="bag" src="bag.png" alt="bag" onclick="openBag()">
       `;
@@ -134,19 +130,16 @@
     }
 
     function revealToy() {
+      const isSecret = Math.floor(Math.random() * 71) === 0;
       let toy;
-      const remainingToys = toyData.filter(t => !openedToys.includes(t.name));
-      const canDropSecret = !openedToys.includes(secretToy.name) && Math.floor(Math.random() * 71) === 0;
 
-      if (canDropSecret) {
+      if (isSecret) {
         toy = secretToy;
         document.body.classList.add('secret-mode');
       } else {
-        toy = remainingToys[Math.floor(Math.random() * remainingToys.length)];
+        toy = toyData[Math.floor(Math.random() * toyData.length)];
         document.body.classList.remove('secret-mode');
       }
-
-      openedToys.push(toy.name);
 
       const toyContainer = document.getElementById('toy-container');
       toyContainer.innerHTML = `
@@ -156,20 +149,12 @@
 
       document.getElementById('main').style.display = 'none';
       document.getElementById('title').style.display = 'none';
-      const retryBtn = document.getElementById('retry-btn');
-
-      retryBtn.textContent = openedToys.length < maxOpens ? 'Try again' : 'Start over';
-      retryBtn.style.display = 'inline-block';
+      document.getElementById('retry-btn').style.display = 'inline-block';
 
       addToStorage(toy.image);
     }
 
     function reset() {
-      if (openedToys.length >= maxOpens) {
-        openedToys = [];
-        document.getElementById('storage-items').innerHTML = '';
-      }
-
       document.getElementById('main').style.display = 'block';
       document.getElementById('title').style.display = 'block';
       document.getElementById('main').innerHTML = `
