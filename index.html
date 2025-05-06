@@ -97,7 +97,7 @@
   <button id="retry-btn" onclick="reset()" style="display:none;">Try again</button>
 
   <div id="storage">
-    <h2>My Storage</h2>
+    <h2>Your Storage</h2>
     <div id="storage-items"></div>
   </div>
 
@@ -113,7 +113,7 @@
 
     const secretToy = { name: "What the hellie you got the secret!", image: "secret.png" };
     let openedToys = [];
-    let maxOpens = 6;
+    let maxOpens = 7;
 
     function openBox() {
       if (openedToys.length >= maxOpens) return;
