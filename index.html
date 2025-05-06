@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mystery Box</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      background: white;
+    }
+    h1 {
+      color: #ff4081;
+      font-size: 3em;
+      margin-top: 40px;
+      animation: pop 1s ease-in-out infinite alternate;
+    }
+    @keyframes pop {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+    img {
+      width: 200px;
+      cursor: pointer;
+      margin-top: 30px;
+    }
+    #toy-container img {
+      width: 180px;
+    }
+    #toy-name {
+      font-size: 1.8em;
+      margin-top: 20px;
+      color: #333;
+    }
+    .secret-bg {
+      background: url('secret-bg.gif') center center no-repeat;
+      background-size: cover;
+      animation: flash 1s ease-in-out infinite alternate;
+    }
+    @keyframes flash {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.2); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="title">Click it!</h1>
+  <div id="main">
+    <img id="box" src="box.png" alt="box" onclick="openBox()">
+  </div>
+
+  <div id="toy-container"></div>
+
+  <script>
+    const toyData = [
+      { name: "U got ", image: "toy1.png" },
+      { name: "U got ", image: "toy2.png" },
+      { name: "U got ", image: "toy3.png" },
+      { name: "U got ", image: "toy4.png" },
+      { name: "U got ", image: "toy5.png" },
+      { name: "U got ", image: "toy6.png" },
+    ];
+
+    const secretToy = { name: "U got Secret!", image: "secret.png" };
+
+    function openBox() {
+      document.getElementById('main').innerHTML = `
+        <img id="bag" src="bag.png" alt="bag" onclick="openBag()">
+      `;
+    }
+
+    function openBag() {
+      const bag = document.getElementById('bag');
+      bag.removeAttribute('onclick');
+      bag.src = 'bag-open.gif';
+
+      setTimeout(() => {
+        revealToy();
+      }, 1500); // подожди 1.5 секунды пока "анимируется" открытие
+    }
+
+    function revealToy() {
+      const isSecret = Math.floor(Math.random() * 71) === 0;
+
+      if (isSecret) {
+        showToy(secretToy.name, secretToy.image, true);
+      } else {
+        const toy = toyData[Math.floor(Math.random() * toyData.length)];
+        showToy(toy.name, toy.image, false);
+      }
+    }
+
+    function showToy(name, imageSrc, isSecret) {
+      const body = document.body;
+      const toyContainer = document.getElementById('toy-container');
+      toyContainer.innerHTML = `
+        <div id="toy-name">${name}</div>
+        <img src="${imageSrc}" alt="${name}">
+      `;
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('title').style.display = 'none';
+
+      if (isSecret) {
+        body.classList.add('secret-bg');
+      } else {
+        body.classList.remove('secret-bg');
+        body.style.background = 'white';
+      }
+    }
+  </script>
+
+</body>
+</html>
